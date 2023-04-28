@@ -1,4 +1,10 @@
 ﻿@page "/"
+@using TennisScoreboardApp.Client.Services.Interfaces
+@inject ITennisScoreService _scoreService
+
+<h1 class="">@_scoreService.GetPlayerOneScore()</h1>
+<h1>@_scoreService.GetPlayerTwoScore()</h1>
 
 
-<h1>Hello, world!</h1>
+<button class="" @onclick="_scoreService.IncrementPlayerOneScore"></button>
+<button class="" @onclick="_scoreService.IncrementPlayerTwoScore"></button>
