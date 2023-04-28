@@ -1,6 +1,6 @@
 ﻿namespace TennisScoreboardApp.Shared.Enums;
 
-public enum TennisScoreName
+public enum TennisScore
 {
 	Love,
 	Fifteen,
