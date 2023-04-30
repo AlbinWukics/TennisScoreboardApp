@@ -5,103 +5,225 @@ namespace TennisScoreboardApp.Client.Services;
 
 public class TennisScoreService : ITennisScoreService
 {
-	private TennisScore playerOne = TennisScore.Love;
-	private TennisScore playerTwo = TennisScore.Love;
+	#region Fields
 
-	public TennisScore GetPlayerOneScore()
+	private TennisScore _playerOne = TennisScore.Love;
+	private TennisScore _playerTwo = TennisScore.Love;
+	private int _playerOneGameScore;
+	private int _playerTwoGameScore;
+	private int _playerOneSetScore;
+	private int _playerTwoSetScore;
+	private bool _playerOneVictory;
+	private bool _playerTwoVictory;
+
+	#endregion
+
+	#region GetMethods
+
+	public TennisScore GetPlayerOnePointScore()
 	{
-		return playerOne;
+		return _playerOne;
 	}
 
-	public TennisScore GetPlayerTwoScore()
+	public TennisScore GetPlayerTwoPointScore()
 	{
-		return playerTwo;
+		return _playerTwo;
 	}
 
-	public void IncrementPlayerOneScore()
+	public int GetPlayerOneGameScore()
+	{
+		return _playerOneGameScore;
+	}
+
+	public int GetPlayerTwoGameScore()
+	{
+		return _playerTwoGameScore;
+	}
+
+	public int GetPlayerOneSetScore()
+	{
+		return _playerOneSetScore;
+	}
+
+	public int GetPlayerTwoSetScore()
+	{
+		return _playerTwoSetScore;
+	}
+
+	#endregion
+
+	public void IncrementPlayerOnePointScore()
 	{
 
-		if (playerOne == TennisScore.Forty && playerTwo < TennisScore.Forty)
+		if (_playerOne == TennisScore.Forty && _playerTwo < TennisScore.Forty)
 		{
-			playerOne = TennisScore.Love;
-			playerTwo = TennisScore.Love;
-			// Score for playerOne
+			_playerOne = TennisScore.Love;
+			_playerTwo = TennisScore.Love;
+			// Game score for playerOne
+			IncrementPlayerOneGameScore();
 			return;
 		}
 
-		else if (playerOne == TennisScore.Advantage)
+		if (_playerOne == TennisScore.Advantage)
 		{
-			playerOne = TennisScore.Love;
-			playerTwo = TennisScore.Love;
-			// Score for playerOne
+			_playerOne = TennisScore.Love;
+			_playerTwo = TennisScore.Love;
+			// Game score for playerOne
+			IncrementPlayerOneGameScore();
 			return;
 		}
 
-		else if (playerOne == TennisScore.Deuce && playerTwo == TennisScore.Advantage)
+		if (_playerOne == TennisScore.Deuce && _playerTwo == TennisScore.Advantage)
 		{
-			playerTwo = TennisScore.Deuce;
+			_playerTwo = TennisScore.Deuce;
+			return;
 		}
 
-		else if (playerOne == TennisScore.Deuce && playerTwo == TennisScore.Deuce)
+		if (_playerOne == TennisScore.Deuce && _playerTwo == TennisScore.Deuce)
 		{
-			playerOne = TennisScore.Advantage;
+			_playerOne = TennisScore.Advantage;
+			return;
 		}
 
-		playerOne = playerOne switch
+		_playerOne = _playerOne switch
 		{
 			TennisScore.Love => TennisScore.Fifteen,
 			TennisScore.Fifteen => TennisScore.Thirty,
 			TennisScore.Thirty => TennisScore.Forty,
-			_ => playerOne
+			_ => _playerOne
 		};
 
-		if (playerOne == TennisScore.Forty && playerTwo == TennisScore.Forty)
+		if (_playerOne == TennisScore.Forty && _playerTwo == TennisScore.Forty)
 		{
-			playerOne = TennisScore.Deuce;
-			playerTwo = TennisScore.Deuce;
+			_playerOne = TennisScore.Deuce;
+			_playerTwo = TennisScore.Deuce;
 		}
 	}
 
-	public void IncrementPlayerTwoScore()
+	public void IncrementPlayerTwoPointScore()
 	{
-		if (playerTwo == TennisScore.Forty && playerOne < TennisScore.Forty)
+		if (_playerTwo == TennisScore.Forty && _playerOne < TennisScore.Forty)
 		{
-			playerOne = TennisScore.Love;
-			playerTwo = TennisScore.Love;
-			// Score for playerTwo
+			_playerOne = TennisScore.Love;
+			_playerTwo = TennisScore.Love;
+			// Game score for playerTwo
+			IncrementPlayerTwoGameScore();
 			return;
 		}
 
-		else if (playerTwo == TennisScore.Advantage)
+		if (_playerTwo == TennisScore.Advantage)
 		{
-			playerOne = TennisScore.Love;
-			playerTwo = TennisScore.Love;
-			// Score for playerTwo
+			_playerOne = TennisScore.Love;
+			_playerTwo = TennisScore.Love;
+			// Game score for playerTwo
+			IncrementPlayerTwoGameScore();
 			return;
 		}
 
-		else if (playerTwo == TennisScore.Deuce && playerOne == TennisScore.Advantage)
+		if (_playerTwo == TennisScore.Deuce && _playerOne == TennisScore.Advantage)
 		{
-			playerOne = TennisScore.Deuce;
+			_playerOne = TennisScore.Deuce;
+			return;
 		}
 
-		else if (playerTwo == TennisScore.Deuce && playerOne == TennisScore.Deuce)
+		if (_playerTwo == TennisScore.Deuce && _playerOne == TennisScore.Deuce)
 		{
-			playerTwo = TennisScore.Advantage;
+			_playerTwo = TennisScore.Advantage;
+			return;
 		}
 
-		playerTwo = playerTwo switch
+		_playerTwo = _playerTwo switch
 		{
 			TennisScore.Love => TennisScore.Fifteen,
 			TennisScore.Fifteen => TennisScore.Thirty,
 			TennisScore.Thirty => TennisScore.Forty,
-			_ => playerTwo
+			_ => _playerTwo
 		};
 
-		if (playerTwo == TennisScore.Forty && playerOne == TennisScore.Forty)
+		if (_playerTwo == TennisScore.Forty && _playerOne == TennisScore.Forty)
 		{
-			playerOne = TennisScore.Deuce;
-			playerTwo = TennisScore.Deuce;
+			_playerOne = TennisScore.Deuce;
+			_playerTwo = TennisScore.Deuce;
 		}
+	}
+
+	public bool ShowPlayerOnePointScore()
+	{
+		return _playerTwo != TennisScore.Advantage;
+	}
+
+	public bool ShowPlayerTwoPointScore()
+	{
+		return _playerOne != TennisScore.Advantage;
+	}
+
+
+	public void IncrementPlayerOneGameScore()
+	{
+		_playerOneGameScore++;
+
+		if (_playerOneGameScore > 6)
+		{
+			IncrementPlayerOneSetScore();
+			_playerOneGameScore = 0;
+			_playerTwoGameScore = 0;
+		}
+	}
+
+	public void IncrementPlayerTwoGameScore()
+	{
+		_playerTwoGameScore++;
+
+		if (_playerTwoGameScore > 6)
+		{
+			IncrementPlayerTwoSetScore();
+			_playerOneGameScore = 0;
+			_playerTwoGameScore = 0;
+		}
+	}
+
+
+	public void IncrementPlayerOneSetScore()
+	{
+		_playerOneSetScore++;
+
+		if (_playerOneSetScore > 1 && _playerTwoVictory is false)
+		{
+			_playerOneVictory = true;
+		}
+	}
+
+	public void IncrementPlayerTwoSetScore()
+	{
+		_playerTwoSetScore++;
+
+		if (_playerTwoSetScore > 1 && _playerOneVictory is false)
+		{
+			_playerTwoVictory = true;
+		}
+	}
+
+	public bool IsPlayerOneVictorious()
+	{
+		return _playerOneVictory;
+	}
+
+	public bool IsPlayerTwoVictorious()
+	{
+		return _playerTwoVictory;
+	}
+
+	public void Reset()
+	{
+		_playerOne = TennisScore.Love;
+		_playerTwo = TennisScore.Love;
+		_playerOneGameScore = 0;
+		_playerTwoGameScore = 0;
+
+		_playerOneSetScore = 0;
+		_playerTwoSetScore = 0;
+
+		_playerOneVictory = false;
+		_playerTwoVictory = false;
 	}
 }
